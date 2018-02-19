@@ -5,7 +5,12 @@ fi
 
 indent() { sed 's/^/    /'; }
 
-targets=`find . -type f -name Dockerfile`
+if [ "$TRAVIS_EVENT_TYPE" == "cron" ]; then
+	targets=`find . -type f -name Dockerfile | grep -E "/latest/Dockerfile$"`
+	echo -e "\x1B[33m'*-latest' image will be built only.\x1B[0m";
+else
+	targets=`find . -type f -name Dockerfile`
+fi
 
 echo "-- Targets:"
 echo "${targets[*]}"
